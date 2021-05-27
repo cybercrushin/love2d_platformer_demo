@@ -1,5 +1,5 @@
 Player = {}
-
+require("Bullet")
 function Player:load()
     -- Size Params
     self.width = 20
@@ -54,10 +54,10 @@ function Player:load()
     -- Weapons
     self.selected_weapon = 'default'
     self.weapons = {}
-    -- self.weapons['default'] = {}
-    -- self.weapons['default']['bullet'] = DefaultBullet
-    -- self.weapons['default']['cooldown_total_time'] = .25
-    -- self.weapons['default']['cooldown_val'] = self.weapons['default']['cooldown_total_time'] 
+    self.weapons['default'] = {}
+    self.weapons['default']['bullet'] = DefaultBullet
+    self.weapons['default']['cooldown_total_time'] = .25
+    self.weapons['default']['cooldown_val'] = self.weapons['default']['cooldown_total_time'] 
 
     -- Player Actions
     self.actions = {}
@@ -86,8 +86,8 @@ function Player:update(dt)
     self:move(dt)
     self.sprite:update(dt)
     self:applyGravity(dt)
-    --self:weaponAction(dt)
-    --self:updateBullets(dt)
+    self:weaponAction(dt)
+    self:updateBullets(dt)
     
     
 end
@@ -163,9 +163,15 @@ function Player:weaponAction(dt)
 
     -- if the user has hit an input to fire a weapon and cooldown has occured, add the bullet object to game
     if love.keyboard.isDown('space', 'rctrl', 'lctrl') and self.can_fire then    
-        newBullet = self.weapons[selected]['bullet'](self.x + self.width / 2, self.y - 10)
+        if self.direction == 'right' then
+            rotation = math.rad(90)
+        else
+            rotation = math.rad(270)
+        end
+        newBullet = self.weapons[selected]['bullet'](self.x, self.y - 10, self.direction, rotation)
         table.insert(self.bullets, newBullet)
         self.weapons[selected]['cooldown_val'] = 0
+        print('fire')
     end
 
 end
@@ -173,10 +179,18 @@ end
 -- This moves any active bullets across the screen
 function Player:updateBullets(dt)
     for i, bullet in ipairs(self.bullets) do
-        bullet.y = bullet.y - (250 * dt)
-    
+        if bullet.dir == "left" then
+            bullet.x = bullet.x - (250 * dt)
+        elseif bullet.dir == "right" then
+            bullet.x = bullet.x + (250 * dt)
+        end
+
         if bullet.y < 0 then -- remove bullets when the   y pass off the screen
             table.remove(self.bullets, i)
+        end
+        if bullet.x > 2600 or bullet.x < 0 then
+            table.remove(self.bullets, i)
+            print('removed')
         end
     end
     
@@ -185,14 +199,14 @@ end
 -- Checks to make sure the player is within the allowed boundaries of the game
 function Player:checkBoundaries(dt)
     if self.x - 10 <= 0 then
-        self.xVel = 0
+        self.xVel = 1
     end
 end
 
 -- Draw all player related assets
 function Player:draw()
     self:drawPlayer(dt)    
-    --self:drawBullets(dt)
+    self:drawBullets(dt)
 end
 
 -- Draw the player sprite
@@ -210,7 +224,7 @@ end
 -- Draw the characters bullets if any
 function Player:drawBullets()
     for i, bullet in ipairs(self.bullets) do
-        love.graphics.draw(bullet.img, bullet.x, bullet.y)
+        love.graphics.draw(bullet.img, bullet.x, bullet.y, bullet.rotation)
     end
 end
 
@@ -259,4 +273,13 @@ function Player:jump(key)
         self.grounded = false
         self.sprite:setState('jumping')
     end
+end
+
+function Player:keypressed(key)
+    self:jump(key)
+    self:attack(key)
+end 
+
+function Player:attack(key)
+
 end
