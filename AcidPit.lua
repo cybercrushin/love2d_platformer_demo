@@ -57,7 +57,7 @@ function AcidPit.beginContact(Player, a, b, collision)
    for i,instance in ipairs(ActiveAcidPits) do
       if a == instance.physics.fixture or b == instance.physics.fixture then
          if a == Player.physics.fixture or b == Player.physics.fixture then
-            Player:teleportTo(100, 100)
+            Player:teleportTo(instance.x, 0)
             return true
          end
       end

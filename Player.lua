@@ -9,12 +9,16 @@ function Player:load()
     self.y = 10
     self.startX = self.x
     self.startY = self.y
+    self.last_grounded_y = self.x
+    self.last_grounded_x = self.y
     self.xVel = 0
     self.yVel = 0
     self.maxSpeed = 200
     self.acceleration = 4000
     self.friction = 3500
-    self.gravity = 1500
+    self.gravity = 1000
+    self.start_hp = 1200
+    self.hp = self.start_hp
         -- Position Params
     -- love.graphics.getHeight() - (32 + self.height)
         --self.y = 0
@@ -40,7 +44,8 @@ function Player:load()
     self.sprite:setRelativeOrigin(0.5, 0.5)
     self.sprite_max_directional_frames = 4
     -- Actions
-    self.ifames = 5
+    self.ifames = 20
+    self.remaining_iframes = 0
 
 
     -- Booleans
@@ -50,6 +55,7 @@ function Player:load()
     self.is_dodging = false
     self.can_accept_input = true
     self.jumping = false
+    self.grounded = false
 
     -- Weapons
     self.selected_weapon = 'default'
@@ -78,10 +84,16 @@ function Player:syncPhysics()
         self.to_y = nil
         print(self.x)
     else 
+        local old_x, old_y = self.x, self.y
         self.x, self.y = self.physics.body:getPosition()
+        if self.y ~= old_y and self.last_grounded and not self.grounded  then 
+            self.last_grounded_y = old_y
+            self.last_grounded_x = old_x 
+        end
         self.physics.body:setLinearVelocity(self.xVel, self.yVel)
     end
     self.sprite:setPosition(self.x, self.y)
+    self.last_grounded = self.grounded
 
 end
 
@@ -99,6 +111,7 @@ function Player:resetPosition(newX, newY)
 function Player:update(dt)
     self:checkBoundaries()
     self:syncPhysics()
+    self:tickIframes()
     self:move(dt)
     self.sprite:update(dt)
     self:applyGravity(dt)
@@ -108,6 +121,22 @@ function Player:update(dt)
     
 end
 
+function Player:tickIframes() 
+    if self.remaining_iframes > 0 then 
+        self.remaining_iframes = self.remaining_iframes - 1
+    end
+end 
+
+function Player:takeDamage(damage_value)  
+    if remaining_iframes < 1 then 
+        self.hp = self.hp - damage_value
+        if self.hp < 0 then 
+            self:resetPosition()
+        end
+        self.remaining_iframes = self.ifames
+    end
+
+end
 function Player:applyGravity(dt)
     if not self.grounded then
        self.yVel = self.yVel + self.gravity * dt

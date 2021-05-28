@@ -9,7 +9,7 @@ local Camera = require("camera")
 -- local Player = require("Player")
 
 function Map:load()
-   
+   self.index = 1
    self.levels = {}
    self.levels[0] = 'wasteland/wasteland'
    self.levels[1] = 'wasteland/wasteland_2'
@@ -21,9 +21,10 @@ function Map:load()
    self:init()
 end
 
-function Map:init(index)
+function Map:init()
+   self.currentLevel = self.levels[self.index]
    self.level = STI("Assets/Map/"..self.currentLevel..".lua", {"box2d"})
-   self.index = index or 0
+
    self.level:box2d_init(World)
    self.solidLayer = self.level.layers.solid
    self.groundLayer = self.level.layers.ground
@@ -39,22 +40,30 @@ function Map:init(index)
    self.map_width = MapWidth
 
    self:spawnEntities()
+   self:spawnHazards()
 end
 
 function Map:draw(cam_x, cam_y, cam_w, cam_h)
+   local msg = "Level: " .. self.currentLevel .. " x: " .. Player.x .. "y: ".. Player.y
+   love.graphics.print(msg, 10, 10)
+   local msg2 = "Player Health: " .. Player.hp .. " Iframes: " .. Player.remaining_iframes
+   love.graphics.print(msg2, 10, 30)
+   local msg2 = "Player Last G X: " .. Player.last_grounded_x .. " Last G Y: " .. Player.last_grounded_y
+   love.graphics.print(msg2, 10, 50)
    self.level:draw(cam_x, cam_y, cam_w, cam_h)
    Camera:apply()
    Player:draw()
    Camera:clear()
 end
 
-function Map:next()
-   self.index = self.index + 1
+function Map:next(new_index)
+   self.index =  new_index or self.index + 1
    self:clean()
    if nil == self.levels[self.index] then 
+      print('doesnint exist')
       self.index = 0
    end
-   self.currentLevel = self.levels[self.index]
+   
    self:init(self.index)
    Player:resetPosition()
 end
@@ -87,6 +96,9 @@ function Map:spawnEntities()
 	-- 	-- 	Coin.new(v.x, v.y)
 	-- 	-- end
 	-- end
+end
+
+function Map:spawnHazards()
    if self.hazardLayer then
       for i, v in ipairs(self.hazardLayer.objects) do
          if v.type == 'acid_pit' then 
@@ -97,9 +109,20 @@ function Map:spawnEntities()
 end
 
 function Map:keypressed(key)
+   print(key)
    if key == "escape" then
          love.event.push("quit")
    end
+   if key == "0" then
+      Map:next(0)
+   end
+   if key == "1" then
+      Map:next(1)
+   end
+   if key == "2" then
+      Map:next(2)
+   end
+   
 end
 
 function Map:beginContact(a, b, collision)
