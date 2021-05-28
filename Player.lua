@@ -70,14 +70,30 @@ function Player:load()
 end
 
 function Player:syncPhysics()
-    self.x, self.y = self.physics.body:getPosition()
+    if self.to_x and self.to_y then
+        self.physics.body:setPosition(self.to_x, self.to_y)
+        self.x = self.to_x
+        self.y = self.to_y
+        self.to_x = nil
+        self.to_y = nil
+        print(self.x)
+    else 
+        self.x, self.y = self.physics.body:getPosition()
+        self.physics.body:setLinearVelocity(self.xVel, self.yVel)
+    end
     self.sprite:setPosition(self.x, self.y)
-    self.physics.body:setLinearVelocity(self.xVel, self.yVel)
 
 end
 
-function Player:resetPosition()
-    self.physics.body:setPosition(self.startX, self.startY)
+function Player:teleportTo(x, y)
+    self.to_x = x
+    self.to_y = y
+end
+
+function Player:resetPosition(newX, newY)
+    x = newX or self.startX
+    y = newY or self.startY
+    self.physics.body:setPosition(x, y)
  end
 
 function Player:update(dt)

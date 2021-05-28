@@ -7,7 +7,7 @@ function love.load()
     Map:load()
     Pause:load()
     Player:load()
-    background = love.graphics.newImage('Assets/Map/wasteland/sky.png')
+    
 end
 
 function love.update(dt)
@@ -21,11 +21,9 @@ end
 
 function love.draw()
     if state == 'in_game' then
-        love.graphics.draw(background, 0, 0, 0, 3, 3)
-        Map.level:draw(-Camera.x, -Camera.y, Camera.scale, Camera.scale)
+        Map:draw(-Camera.x, -Camera.y, Camera.scale, Camera.scale)
 
         Camera:apply()
-
         Player:draw()
         Camera:clear()
     end
@@ -49,7 +47,8 @@ function love.keypressed(key)
 end
 
 function beginContact(a, b, collision)
-	Player:beginContact(a, b, collision)
+    Player:beginContact(a, b, collision)
+	Map:beginContact(a, b, collision)
 end
 
 function endContact(a, b, collision)

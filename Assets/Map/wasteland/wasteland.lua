@@ -20,7 +20,7 @@ return {
       spacing = 0,
       margin = 0,
       columns = 32,
-      image = "wasteland/files.png",
+      image = "imgs/tiles.png",
       imagewidth = 512,
       imageheight = 256,
       objectalignment = "unspecified",
