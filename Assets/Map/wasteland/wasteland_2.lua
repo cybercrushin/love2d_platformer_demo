@@ -9,7 +9,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 4,
-  nextobjectid = 36,
+  nextobjectid = 37,
   properties = {},
   tilesets = {
     {
@@ -180,7 +180,7 @@ return {
           x = 848,
           y = 257,
           width = 16,
-          height = 16,
+          height = 6.66667,
           rotation = 0,
           visible = true,
           properties = {
@@ -428,19 +428,6 @@ return {
       properties = {},
       objects = {
         {
-          id = 25,
-          name = "",
-          type = "acid_pit",
-          shape = "rectangle",
-          x = 320.5,
-          y = 360.5,
-          width = 79,
-          height = 14.5,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
           id = 28,
           name = "",
           type = "acid_pit",
@@ -451,7 +438,9 @@ return {
           height = 14.5,
           rotation = 0,
           visible = true,
-          properties = {}
+          properties = {
+            ["collidable"] = true
+          }
         },
         {
           id = 34,
@@ -465,6 +454,21 @@ return {
           rotation = 0,
           visible = true,
           properties = {}
+        },
+        {
+          id = 36,
+          name = "",
+          type = "acid_pit",
+          shape = "rectangle",
+          x = 318.977,
+          y = 366.295,
+          width = 84.5909,
+          height = 14.5,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["collidable"] = true
+          }
         }
       }
     }

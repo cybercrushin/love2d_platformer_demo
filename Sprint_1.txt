@@ -5,11 +5,15 @@ Love - 2d Platformer Requirements
 	x Entities
 	x Player
 		x bullets
+			- collision detection
+			- metatable setup
 	x Map
 		- clear physics
+		- Spawn Points 
 	x Level
 	- Items
-	- hazards
+	x hazards
+		- acid pits
 	- Enemy
 		- sub Classes
 	x Pause Menu
@@ -37,4 +41,10 @@ Love - 2d Platformer Requirements
 	- Spawn Points
 	- Sprites
 	- AI
+	
+	
+ - Debug Functionality
+	- Toggle Hitboxes for player and hazards
+	- You can edit map and reload level!
+	- Scaling and collision issues
 
