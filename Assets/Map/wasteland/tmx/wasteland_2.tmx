@@ -149,8 +149,9 @@
   </object>
  </objectgroup>
  <objectgroup color="#0000ff" id="5" name="triggers">
-  <object id="40" type="exit_point" x="2546" y="286" width="13.3333" height="65.3333">
+  <object id="40" type="exit_point" x="2543.33" y="286" width="16" height="65.3333">
    <properties>
+    <property name="collidable" type="bool" value="true"/>
     <property name="requires_type" value="gold_key"/>
    </properties>
   </object>

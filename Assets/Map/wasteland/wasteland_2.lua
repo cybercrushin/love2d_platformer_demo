@@ -447,13 +447,14 @@ return {
           name = "",
           type = "exit_point",
           shape = "rectangle",
-          x = 2546,
+          x = 2543.33,
           y = 286,
-          width = 13.3333,
+          width = 16,
           height = 65.3333,
           rotation = 0,
           visible = true,
           properties = {
+            ["collidable"] = true,
             ["requires_type"] = "gold_key"
           }
         }
@@ -474,7 +475,7 @@ return {
       objects = {
         {
           id = 37,
-          name = "",
+          name = "Gold Key",
           type = "gold_key",
           shape = "point",
           x = 1415.33,

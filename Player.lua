@@ -93,6 +93,7 @@ function Player:removeKeys()
     for i, instance in ipairs(self.items) do
         if instance.type == 'gold_key' then 
             table.remove(self.items, i)
+            print('removed')
         end
     end
 end
