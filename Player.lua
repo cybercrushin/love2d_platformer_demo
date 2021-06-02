@@ -73,6 +73,28 @@ function Player:load()
     
     -- Player Bullet Objects
     self.bullets = {}
+
+    self.items = {}
+end
+
+function Player:addItem(item)
+    table.insert(self.items, item)
+end 
+
+function Player:hasItemByType(type)
+    for i, instance in ipairs(self.items) do
+        if instance.type == type then 
+            return true
+        end
+    end
+end 
+
+function Player:removeKeys()
+    for i, instance in ipairs(self.items) do
+        if instance.type == 'gold_key' then 
+            table.remove(self.items, i)
+        end
+    end
 end
 
 function Player:syncPhysics()

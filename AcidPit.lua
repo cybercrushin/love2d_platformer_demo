@@ -22,8 +22,8 @@ function AcidPit.new(x, y, width, height)
    instance.width = width
    instance.height = height
    
-   instance.damage = 1
-    print(x, y, width, height)
+   instance.damage = 100
+   print(x, y, width, height)
    instance.physics = {}
    instance.physics.body = love.physics.newBody(World, instance.x, instance.y, "static")
    instance.physics.shape = love.physics.newRectangleShape(instance.width, instance.height)
@@ -55,6 +55,7 @@ end
 
 function AcidPit.beginContact(Player, a, b, collision)
    for i,instance in ipairs(ActiveAcidPits) do
+      print(Player.x)
       if a == instance.physics.fixture or b == instance.physics.fixture then
          if a == Player.physics.fixture or b == Player.physics.fixture then
             print('Teleport')
